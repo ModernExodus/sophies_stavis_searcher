@@ -20,3 +20,13 @@ Another runnable scheduled with the same executor periodically sends me notifica
 __Other info__
 
 I recently got my Oracle Java SE 11 Professional Certification, so I decided to put it to use! I took this as a learning opportunity, so I kept dependencies to a minimum and built many things from scratch, like creating a JWT token, signing it with a SHA256WithRSA algorithm, and using it to retrieve an access token from Google to later invoke their APIs. I also tried my hand at applying a few design patterns for practice. I plan on making minor updates to this as the need arises. 
+
+__Backlog__
+1. Property changes without needing to restart the application
+2. Better and more consistent SMS solution
+3. Notifications that better inform my wife of the food truck's schedule outside our neighborhood
+4. Logs that rotate based on date
+5. Query the Google Calendar API with more than one keyword
+6. Notify my wife of other events in which she may be interested
+7. Implement the `EncryptedFileReader` to read encrypted data instead of storing in plaintext files
+8. Implement a way to check the health status of the application without waiting for the scheduled health check notification
