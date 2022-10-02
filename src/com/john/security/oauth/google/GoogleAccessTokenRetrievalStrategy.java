@@ -41,9 +41,9 @@ public class GoogleAccessTokenRetrievalStrategy implements AccessTokenRetrievalS
 	}
 	
 	private String readPrivateKey() {
-		FileReader fr = new SimpleFileReader(200);
+		FileReader fr = new SimpleFileReader(PRIVATE_KEY_LOCATION, 200);
 		try {
-			return fr.readFile(PRIVATE_KEY_LOCATION);
+			return fr.readFile();
 		} catch (IOException e) {
 			log.severe(String.format("Failed to retrieve private key to generate JWT to get Google Access Token: %s",
 					e.getMessage()));

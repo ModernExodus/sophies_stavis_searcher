@@ -16,23 +16,24 @@ public class SimpleFileReader implements FileReader {
 	private static final Logger log = Logger.getLogger(SimpleFileReader.class.getCanonicalName());
 	private static final int DEFAULT_BUFFER_SIZE = 50;
 	
+	private final String path;
 	private final int bufferSize;
 	
-	public SimpleFileReader() {
-		bufferSize = DEFAULT_BUFFER_SIZE;
-		logInitialization(bufferSize);
+	public SimpleFileReader(String path) {
+		this(path, DEFAULT_BUFFER_SIZE);
 	}
 	
-	public SimpleFileReader(int bufferSize) {
+	public SimpleFileReader(String path, int bufferSize) {
+		this.path = path;
 		this.bufferSize = bufferSize;
-		logInitialization(bufferSize);
+		log.fine(String.format("Simple File Reader initialized with buffer size of %d bytes", bufferSize));
 	}
 	
 	/** 
 	 * Reads basic text content from a file given a path to the file and returns the content read
 	 * as a String. The operation of reading a file is blocking, and is not guaranteed to be thread-safe.
 	 */
-	public String readFile(String path) throws IOException {
+	public String readFile() throws IOException {
 		log.fine(String.format("Attempting to read file at %s", path));
 		try (FileInputStream fis = new FileInputStream(new File(path))) {
 			byte[] buffer = new byte[bufferSize];
@@ -47,9 +48,5 @@ public class SimpleFileReader implements FileReader {
 			log.severe("Failed to read file due to exception: " + e.getMessage());
 			throw e;
 		}
-	}
-	
-	private void logInitialization(int bufferSize) {
-		log.fine(String.format("Simple File Reader initialized with buffer size of %d bytes", bufferSize));
 	}
 }

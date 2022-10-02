@@ -52,9 +52,8 @@ public final class MockDataProvider {
 	}
 	
 	private static void loadMockData() throws IOException {
-		FileReader fr = new SimpleFileReader(1000);
 		for (MOCK_DATA mock : MOCK_DATA.values()) {
-			cachedMocks.put(mock.getKey(), new JSONObject(fr.readFile(mock.getFileLocation())));
+			cachedMocks.put(mock.getKey(), new JSONObject(new SimpleFileReader(mock.getFileLocation(), 1000).readFile()));
 			log.fine(String.format("Loaded mock data with key=%s", mock.getKey()));
 		}
 	}

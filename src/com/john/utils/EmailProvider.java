@@ -26,9 +26,9 @@ public class EmailProvider {
 		SMTP_SERVER = ApplicationPropertyProvider.getProperty(Property.EMAIL_SMTP_SERVER);
 		SMTP_PORT = ApplicationPropertyProvider.getIntProperty(Property.EMAIL_SMTP_PORT);
 		
-		FileReader fr = new SimpleFileReader();
+		FileReader fr = new SimpleFileReader("./resources/google/gmail_app_pw.txt");
 		try {
-			SENDER_PASSWORD = fr.readFile("./resources/google/gmail_app_pw.txt");
+			SENDER_PASSWORD = fr.readFile();
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage());
 		}
