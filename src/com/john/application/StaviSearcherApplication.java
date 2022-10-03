@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.john.application.configuration.CustomLogManagement;
 import com.john.utils.ApplicationPropertyProvider;
+import com.john.utils.RuntimeArgumentProvider;
 import com.john.utils.ApplicationPropertyProvider.Property;
 
 public class StaviSearcherApplication {
@@ -18,6 +19,11 @@ public class StaviSearcherApplication {
 
 	public static void main(String[] args) {
 		log.info("Sophie's Stavi's Searcher application is starting up!");
+		
+		// process any arguments provided
+		RuntimeArgumentProvider.init(args);
+		
+		// create the ScheduledExecutorService
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		
 		// schedule main query operation
