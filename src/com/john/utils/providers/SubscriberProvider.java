@@ -1,4 +1,4 @@
-package com.john.utils;
+package com.john.utils.providers;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.john.notifications.model.Recipient;
+import com.john.utils.FileReader;
+import com.john.utils.SimpleFileReader;
 
 /**
  * Keeps a record of all interested parties who wish to receive notifications

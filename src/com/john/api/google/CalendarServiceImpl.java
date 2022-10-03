@@ -18,10 +18,10 @@ import org.json.JSONObject;
 import com.john.api.google.model.Calendar;
 import com.john.api.google.model.Event;
 import com.john.security.oauth.google.GoogleAccessToken;
-import com.john.utils.ApplicationPropertyProvider;
-import com.john.utils.MockDataProvider;
 import com.john.utils.http.HttpClientHelper;
 import com.john.utils.http.HttpHeader;
+import com.john.utils.providers.ApplicationPropertyProvider;
+import com.john.utils.providers.MockDataProvider;
 
 public class CalendarServiceImpl {
 	private static final Logger log = Logger.getLogger(CalendarServiceImpl.class.getCanonicalName());

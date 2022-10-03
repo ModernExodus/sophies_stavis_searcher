@@ -1,4 +1,4 @@
-package com.john.utils;
+package com.john.utils.providers;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.json.JSONObject;
+
+import com.john.utils.SimpleFileReader;
 
 /**
  * Should be used to load mock data from JSON files

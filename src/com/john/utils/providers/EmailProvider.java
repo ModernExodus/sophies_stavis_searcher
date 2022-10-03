@@ -1,4 +1,4 @@
-package com.john.utils;
+package com.john.utils.providers;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -10,7 +10,9 @@ import org.simplejavamail.api.mailer.config.TransportStrategy;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 
-import com.john.utils.ApplicationPropertyProvider.Property;
+import com.john.utils.FileReader;
+import com.john.utils.SimpleFileReader;
+import com.john.utils.providers.ApplicationPropertyProvider.Property;
 
 public class EmailProvider {
 	private static final Logger log = Logger.getLogger(EmailProvider.class.getCanonicalName());

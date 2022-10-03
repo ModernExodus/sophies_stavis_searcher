@@ -6,9 +6,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import com.john.application.configuration.CustomLogManagement;
-import com.john.utils.ApplicationPropertyProvider;
-import com.john.utils.RuntimeArgumentProvider;
-import com.john.utils.ApplicationPropertyProvider.Property;
+import com.john.utils.providers.ApplicationPropertyProvider;
+import com.john.utils.providers.RuntimeArgumentProvider;
+import com.saltweaver.salting.api.InvalidSaltingStrategyException;
+import com.john.utils.providers.ApplicationPropertyProvider.Property;
 
 public class StaviSearcherApplication {
 	private static final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -17,7 +18,7 @@ public class StaviSearcherApplication {
 		CustomLogManagement.enableApplicationLogging();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvalidSaltingStrategyException {
 		log.info("Sophie's Stavi's Searcher application is starting up!");
 		
 		// process any arguments provided

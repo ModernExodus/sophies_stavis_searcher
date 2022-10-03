@@ -14,12 +14,12 @@ import com.john.security.jwt.GoogleJWTToken;
 import com.john.security.jwt.JWTToken;
 import com.john.security.oauth.AccessToken;
 import com.john.security.oauth.AccessTokenRetrievalStrategy;
-import com.john.utils.ApplicationPropertyProvider;
 import com.john.utils.FileReader;
-import com.john.utils.MockDataProvider;
 import com.john.utils.SimpleFileReader;
 import com.john.utils.http.HttpClientHelper;
 import com.john.utils.http.HttpHeader;
+import com.john.utils.providers.ApplicationPropertyProvider;
+import com.john.utils.providers.MockDataProvider;
 
 /** 
  * An <code>AccessTokenRetrievalStrategy</code> able to obtain a valid <code>AccessToken</code> from
