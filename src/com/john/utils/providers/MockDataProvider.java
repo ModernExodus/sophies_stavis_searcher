@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
+import com.john.utils.FileReader;
 import com.john.utils.SimpleFileReader;
 
 /**
@@ -55,7 +56,7 @@ public final class MockDataProvider {
 	
 	private static void loadMockData() throws IOException {
 		for (MOCK_DATA mock : MOCK_DATA.values()) {
-			cachedMocks.put(mock.getKey(), new JSONObject(new SimpleFileReader(mock.getFileLocation(), 1000).readFile()));
+			cachedMocks.put(mock.getKey(), new JSONObject(FileReader.toUTF8String(new SimpleFileReader(mock.getFileLocation(), 1000).readFile())));
 			log.fine(String.format("Loaded mock data with key=%s", mock.getKey()));
 		}
 	}

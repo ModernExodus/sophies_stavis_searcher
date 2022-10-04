@@ -35,6 +35,10 @@ public final class SecretProvider {
 		throw new MissingSecretException(secret.toString().concat(" was not found!"));
 	}
 	
+	public static int getIntSecret(Secret secret) throws MissingSecretException {
+		return Integer.parseInt(getSecret(secret));
+	}
+	
 	private static Properties loadSecrets() throws MissingSecretException {
 		Properties secrets = new Properties();
 		try {
@@ -48,7 +52,8 @@ public final class SecretProvider {
 
 	public static enum Secret {
 		AES_PRIVATE_KEY("aes.private_key"),
-		SALTING_STRATEGY_COMPOSITION("salting_strategy_composition");
+		SALTING_STRATEGY_COMPOSITION("salting_strategy.composition"),
+		SALTING_STRATEGY_LENGTH("salting_strategy.length");
 		
 		private final String propertyName;
 		private Secret(String propertyName) {

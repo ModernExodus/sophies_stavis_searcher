@@ -15,11 +15,12 @@ import com.john.security.jwt.JWTToken;
 import com.john.security.oauth.AccessToken;
 import com.john.security.oauth.AccessTokenRetrievalStrategy;
 import com.john.utils.FileReader;
-import com.john.utils.SimpleFileReader;
 import com.john.utils.http.HttpClientHelper;
 import com.john.utils.http.HttpHeader;
 import com.john.utils.providers.ApplicationPropertyProvider;
 import com.john.utils.providers.MockDataProvider;
+import com.john.utils.providers.secrets.MissingSecretException;
+import com.saltweaver.salting.api.InvalidSaltingStrategyException;
 
 /** 
  * An <code>AccessTokenRetrievalStrategy</code> able to obtain a valid <code>AccessToken</code> from
@@ -41,10 +42,10 @@ public class GoogleAccessTokenRetrievalStrategy implements AccessTokenRetrievalS
 	}
 	
 	private String readPrivateKey() {
-		FileReader fr = new SimpleFileReader(PRIVATE_KEY_LOCATION, 200);
 		try {
-			return fr.readFile();
-		} catch (IOException e) {
+			FileReader fr = FileReader.standardDecryptionReader(PRIVATE_KEY_LOCATION, 200);
+			return FileReader.toUTF8String(fr.readFile());
+		} catch (IOException | MissingSecretException | InvalidSaltingStrategyException e) {
 			log.severe(String.format("Failed to retrieve private key to generate JWT to get Google Access Token: %s",
 					e.getMessage()));
 			return "";

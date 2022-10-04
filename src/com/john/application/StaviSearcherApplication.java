@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import com.john.application.configuration.CustomLogManagement;
 import com.john.utils.providers.ApplicationPropertyProvider;
 import com.john.utils.providers.RuntimeArgumentProvider;
-import com.saltweaver.salting.api.InvalidSaltingStrategyException;
 import com.john.utils.providers.ApplicationPropertyProvider.Property;
 
 public class StaviSearcherApplication {
@@ -18,7 +17,7 @@ public class StaviSearcherApplication {
 		CustomLogManagement.enableApplicationLogging();
 	}
 
-	public static void main(String[] args) throws InvalidSaltingStrategyException {
+	public static void main(String[] args) {
 		log.info("Sophie's Stavi's Searcher application is starting up!");
 		
 		// process any arguments provided

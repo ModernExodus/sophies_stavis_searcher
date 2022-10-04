@@ -11,8 +11,9 @@ import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 
 import com.john.utils.FileReader;
-import com.john.utils.SimpleFileReader;
 import com.john.utils.providers.ApplicationPropertyProvider.Property;
+import com.john.utils.providers.secrets.MissingSecretException;
+import com.saltweaver.salting.api.InvalidSaltingStrategyException;
 
 public class EmailProvider {
 	private static final Logger log = Logger.getLogger(EmailProvider.class.getCanonicalName());
@@ -27,11 +28,11 @@ public class EmailProvider {
 		SENDER_EMAIL = ApplicationPropertyProvider.getProperty(Property.EMAIL_ADDRESS);
 		SMTP_SERVER = ApplicationPropertyProvider.getProperty(Property.EMAIL_SMTP_SERVER);
 		SMTP_PORT = ApplicationPropertyProvider.getIntProperty(Property.EMAIL_SMTP_PORT);
-		
-		FileReader fr = new SimpleFileReader("./resources/google/gmail_app_pw.txt");
+
 		try {
-			SENDER_PASSWORD = fr.readFile();
-		} catch (IOException e) {
+			FileReader fr = FileReader.standardDecryptionReader("./resources/google/gmail_app_pw.txt", 50);
+			SENDER_PASSWORD = FileReader.toUTF8String(fr.readFile());
+		} catch (IOException | MissingSecretException | InvalidSaltingStrategyException e) {
 			throw new RuntimeException(e.getMessage());
 		}
 	}

@@ -1,6 +1,13 @@
 package com.john.utils;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
+
+import com.john.utils.providers.secrets.MissingSecretException;
+import com.john.utils.providers.secrets.SecretProvider;
+import com.john.utils.providers.secrets.SecretProvider.Secret;
+import com.saltweaver.salting.api.InvalidSaltingStrategyException;
+import com.saltweaver.salting.api.SaltingStrategy;
 
 public class Utils {
 	
@@ -18,5 +25,11 @@ public class Utils {
 		String firstFourChars = emailToMask.substring(0, 4);
 		String domain = emailToMask.substring(emailToMask.indexOf('@'));
 		return firstFourChars.concat("xxxxxxxxxxx").concat(domain);
+	}
+	
+	public static SaltingStrategy getSaltingStrategy() throws MissingSecretException, InvalidSaltingStrategyException {
+		int saltLength = SecretProvider.getIntSecret(Secret.SALTING_STRATEGY_LENGTH);
+		String saltingComposition = SecretProvider.getSecret(Secret.SALTING_STRATEGY_COMPOSITION);
+		return SaltingStrategy.getStrategy(Arrays.asList(saltingComposition.split(",")), saltLength);
 	}
 }
