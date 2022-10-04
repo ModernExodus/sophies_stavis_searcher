@@ -1,7 +1,5 @@
 package com.john.utils.providers;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -62,7 +60,7 @@ public class SubscriberProvider {
 	private static Recipient[] loadRecipientsFromFile(String path) {
 		FileReader fr = new SimpleFileReader(path, 250);
 		try {
-			JSONArray subs = new JSONObject(new String(fr.readFile(), UTF_8)).getJSONArray("subscribers");
+			JSONArray subs = new JSONObject(FileReader.toUTF8String(fr.readFile())).getJSONArray("subscribers");
 			Recipient[] result = new Recipient[subs.length()];
 			for (int i = 0; i < subs.length(); i++) {
 				result[i] = new Recipient(subs.getJSONObject(i));
