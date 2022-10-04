@@ -25,12 +25,14 @@ public class HealthChecker {
 	
 	/**
 	 * Schedules a notification to be sent to every admin recipient using the provided
-	 * <code>ScheduledExecutorService</code>. It starts after an initial delay of 1 minute.
+	 * <code>ScheduledExecutorService</code>. It starts after an initial delay as specified in
+	 * application.properties, or 1 minute if none is specified.
 	 * */
 	public static void start(ScheduledExecutorService executor) {
 		if (ApplicationPropertyProvider.getBooleanProperty(Property.HEALTHCHECKER_ENABLED)) {
 			final long frequency = ApplicationPropertyProvider.getLongProperty(Property.HEALTHCHECKER_FREQUENCY);
-			log.info(String.format("Starting automatic health checks with a frequency of %d minutes", frequency));
+			final long initialDelay = ApplicationPropertyProvider.getLongProperty(Property.HEALTHCHECKER_INITIAL_DELAY, 1);
+			log.info(String.format("Starting automatic health checks with a frequency of %d minute(s)", frequency));
 			executor.scheduleAtFixedRate(() -> {
 				try {
 					log.info("The health checker is now running in Thread #" + Thread.currentThread().getId());
@@ -52,7 +54,7 @@ public class HealthChecker {
 							"Exception was caught during the scheduled health check: [%s]. The health check will try again in %d minutes.",
 							e.getMessage(), frequency));
 				}
-			}, 1, frequency, TimeUnit.MINUTES);
+			}, initialDelay, frequency, TimeUnit.MINUTES);
 		} else {
 			log.warning("Health checks are disabled");
 		}
