@@ -15,10 +15,10 @@ import com.john.security.oauth.AccessToken;
 import com.john.security.oauth.AccessTokenService;
 import com.john.security.oauth.AccessTokenServiceProvider;
 import com.john.security.oauth.google.GoogleAccessToken;
+import com.john.utils.providers.ApplicationPropertyProvider;
+import com.john.utils.providers.SubscriberProvider;
+import com.john.utils.providers.ApplicationPropertyProvider.Property;
 import com.john.security.oauth.AccessTokenService.AccessTokenStrategy;
-import com.john.utils.ApplicationPropertyProvider;
-import com.john.utils.SubscriberProvider;
-import com.john.utils.ApplicationPropertyProvider.Property;
 
 /**
  * The class containing the majority of the business logic. It's the brain

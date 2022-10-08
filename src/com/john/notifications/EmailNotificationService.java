@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 import org.simplejavamail.api.email.Email;
 
 import com.john.notifications.model.Recipient;
-import com.john.utils.ApplicationPropertyProvider;
-import com.john.utils.ApplicationPropertyProvider.Property;
-import com.john.utils.EmailProvider;
+import com.john.utils.providers.ApplicationPropertyProvider;
+import com.john.utils.providers.EmailProvider;
+import com.john.utils.providers.ApplicationPropertyProvider.Property;
 
 public class EmailNotificationService implements NotificationService {
 	private static final Logger log = Logger.getLogger(EmailNotificationService.class.getCanonicalName());

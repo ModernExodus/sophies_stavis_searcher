@@ -1,4 +1,4 @@
-package com.john.utils;
+package com.john.utils.providers;
 
 import java.io.FileInputStream;
 import java.io.IOException;

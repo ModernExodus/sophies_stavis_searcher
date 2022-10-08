@@ -1,4 +1,4 @@
-package com.john.utils;
+package com.john.utils.providers;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.john.notifications.model.Recipient;
+import com.john.utils.FileReader;
+import com.john.utils.SimpleFileReader;
 
 /**
  * Keeps a record of all interested parties who wish to receive notifications
@@ -56,9 +58,9 @@ public class SubscriberProvider {
 	}
 	
 	private static Recipient[] loadRecipientsFromFile(String path) {
-		FileReader fr = new SimpleFileReader(250);
+		FileReader fr = new SimpleFileReader(path, 250);
 		try {
-			JSONArray subs = new JSONObject(fr.readFile(path)).getJSONArray("subscribers");
+			JSONArray subs = new JSONObject(FileReader.toUTF8String(fr.readFile())).getJSONArray("subscribers");
 			Recipient[] result = new Recipient[subs.length()];
 			for (int i = 0; i < subs.length(); i++) {
 				result[i] = new Recipient(subs.getJSONObject(i));

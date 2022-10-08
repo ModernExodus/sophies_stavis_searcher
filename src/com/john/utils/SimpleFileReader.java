@@ -1,10 +1,10 @@
 package com.john.utils;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /** 
@@ -16,40 +16,43 @@ public class SimpleFileReader implements FileReader {
 	private static final Logger log = Logger.getLogger(SimpleFileReader.class.getCanonicalName());
 	private static final int DEFAULT_BUFFER_SIZE = 50;
 	
+	private final String path;
 	private final int bufferSize;
 	
-	public SimpleFileReader() {
-		bufferSize = DEFAULT_BUFFER_SIZE;
-		logInitialization(bufferSize);
+	public SimpleFileReader(String path) {
+		this(path, DEFAULT_BUFFER_SIZE);
 	}
 	
-	public SimpleFileReader(int bufferSize) {
+	public SimpleFileReader(String path, int bufferSize) {
+		this.path = path;
 		this.bufferSize = bufferSize;
-		logInitialization(bufferSize);
+		log.fine(String.format("Simple File Reader initialized with buffer size of %d bytes", bufferSize));
 	}
 	
 	/** 
 	 * Reads basic text content from a file given a path to the file and returns the content read
 	 * as a String. The operation of reading a file is blocking, and is not guaranteed to be thread-safe.
 	 */
-	public String readFile(String path) throws IOException {
+	public byte[] readFile() throws IOException {
 		log.fine(String.format("Attempting to read file at %s", path));
 		try (FileInputStream fis = new FileInputStream(new File(path))) {
+			List<Byte> result = new ArrayList<>();
 			byte[] buffer = new byte[bufferSize];
-			int numBytesRead = 0;
-			StringBuilder sb = new StringBuilder();
-			while ((numBytesRead = fis.read(buffer)) != -1) {
-				sb.append(new String(buffer, 0, numBytesRead, UTF_8));
+			int read = 0;
+			while ((read = fis.read(buffer)) != -1) {
+				for (int i = 0; i < read; i++) {
+					result.add(buffer[i]);
+				}
 			}
 			log.fine(String.format("Successfully read file at %s", path));
-			return sb.toString();
+			byte[] unboxedResult = new byte[result.size()];
+			for (int i = 0; i < result.size(); i++) {
+				unboxedResult[i] = result.get(i);
+			}
+			return unboxedResult;
 		} catch (IOException e) {
 			log.severe("Failed to read file due to exception: " + e.getMessage());
 			throw e;
 		}
-	}
-	
-	private void logInitialization(int bufferSize) {
-		log.fine(String.format("Simple File Reader initialized with buffer size of %d bytes", bufferSize));
 	}
 }

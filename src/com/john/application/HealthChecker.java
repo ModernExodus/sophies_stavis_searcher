@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 import com.john.notifications.EmailNotificationService;
 import com.john.notifications.TextNotificationService;
 import com.john.notifications.model.Recipient;
-import com.john.utils.ApplicationPropertyProvider;
-import com.john.utils.ApplicationPropertyProvider.Property;
-import com.john.utils.SubscriberProvider;
+import com.john.utils.providers.ApplicationPropertyProvider;
+import com.john.utils.providers.SubscriberProvider;
+import com.john.utils.providers.ApplicationPropertyProvider.Property;
 
 /**
  * Use to start and stop periodic health checks. Health checks are simple notifications sent

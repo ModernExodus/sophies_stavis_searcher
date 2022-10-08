@@ -10,8 +10,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import com.john.utils.ApplicationPropertyProvider;
-import com.john.utils.ApplicationPropertyProvider.Property;
+import com.john.utils.providers.ApplicationPropertyProvider;
+import com.john.utils.providers.ApplicationPropertyProvider.Property;
 
 /**
  * Responsible for loading the appropriate log properties file, and kicking off the scheduled task
