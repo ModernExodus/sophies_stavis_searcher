@@ -1,4 +1,4 @@
-package com.john.utils;
+package com.john.utils.providers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +28,7 @@ public final class RuntimeArgumentProvider {
 		}
 		log.info("Initializing RuntimeArgumentProvider");
 		if (args.length == 0) {
+			arguments = Map.of();
 			log.info("No arguments found for RuntimeArgumentProvider");
 		} else {
 			arguments = parseArguments(args);
@@ -45,6 +46,12 @@ public final class RuntimeArgumentProvider {
 	public static boolean getBooleanArgumentValue(RuntimeArgument argument) {
 		assertInitialized();
 		return Boolean.parseBoolean(arguments.get(argument.getValue()));
+	}
+	
+	/** Returns <code>true</code> if the argument is available, <code>false</code> otherwise*/
+	public static boolean hasArgumentValue(RuntimeArgument argument) {
+		assertInitialized();
+		return arguments.containsKey(argument.getValue());
 	}
 	
 	private static void assertInitialized() {
