@@ -27,7 +27,8 @@ public class StaviSearcherApplication {
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		
 		// schedule main query operation
-		executor.scheduleAtFixedRate(new StavisQueryOperator(), 0,
+		executor.scheduleAtFixedRate(new StavisQueryOperator(),
+				ApplicationPropertyProvider.getLongProperty(Property.QUERY_INITIAL_DELAY, 0),
 				ApplicationPropertyProvider.getLongProperty(Property.QUERY_FREQUENCY_MINUTES), TimeUnit.MINUTES);
 		log.info("Stavi's Query Operator has been scheduled with the executor");
 		

@@ -31,16 +31,41 @@ public final class ApplicationPropertyProvider {
 		return APP_PROPERTIES.getProperty(property.toString());
 	}
 	
+	public static String getProperty(Property property, String defaultValue) {
+		if (hasProperty(property)) {
+			return getProperty(property);
+		}
+		return defaultValue;
+	}
+	
 	public static int getIntProperty(Property property) {
 		return Integer.parseInt(APP_PROPERTIES.getProperty(property.toString()));
+	}
+	
+	public static int getIntProperty(Property property, int defaultValue) {
+		if (hasProperty(property)) {
+			return getIntProperty(property);
+		}
+		return defaultValue;
 	}
 	
 	public static long getLongProperty(Property property) {
 		return Long.parseLong(APP_PROPERTIES.getProperty(property.toString()));
 	}
 	
+	public static long getLongProperty(Property property, long defaultValue) {
+		if (hasProperty(property)) {
+			return getLongProperty(property);
+		}
+		return defaultValue;
+	}
+	
 	public static boolean getBooleanProperty(Property property) {
 		return Boolean.parseBoolean(APP_PROPERTIES.getProperty(property.toString()));
+	}
+	
+	public static boolean hasProperty(Property property) {
+		return APP_PROPERTIES.containsKey(property.toString());
 	}
 	
 	public static enum Property {
@@ -48,6 +73,7 @@ public final class ApplicationPropertyProvider {
 		PROD("prod"),
 		QUERY_MAX_DAYS("query.maxdays"),
 		QUERY_FREQUENCY_MINUTES("query.frequency"),
+		QUERY_INITIAL_DELAY("query.initialdelay"),
 		QUERY_KEYWORD("query.keyword"),
 		CALENDAR_ID("calendar.id"),
 		NOTIFICATIONS_ENABLED("notifications.enabled"),
@@ -61,6 +87,7 @@ public final class ApplicationPropertyProvider {
 		LOGGING_ROTATION_PREFIX("logging.rotation.prefix"),
 		HEALTHCHECKER_ENABLED("healthchecker.enabled"),
 		HEALTHCHECKER_FREQUENCY("healthchecker.frequency"),
+		HEALTHCHECKER_INITIAL_DELAY("healthchecker.initialdelay"),
 		HEALTHCHECKER_SUBJECT("healthchecker.subject"),
 		HEALTHCHECKER_MESSAGE("healthchecker.message");
 		
