@@ -1,6 +1,7 @@
 package com.john.utils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.john.utils.providers.secrets.MissingSecretException;
@@ -31,5 +32,14 @@ public class Utils {
 		int saltLength = SecretProvider.getIntSecret(Secret.SALTING_STRATEGY_LENGTH);
 		String saltingComposition = SecretProvider.getSecret(Secret.SALTING_STRATEGY_COMPOSITION);
 		return SaltingStrategy.getStrategy(Arrays.asList(saltingComposition.split(",")), saltLength);
+	}
+	
+	public static String toUnorderedHtmlList(List<String> items) {
+		HtmlBuilder html = HtmlBuilder.newBuilder().openTag("ul");
+		for (String item : items) {
+			html.addElement("li", item);
+		}
+		html.closeTag("ul");
+		return html.build();
 	}
 }

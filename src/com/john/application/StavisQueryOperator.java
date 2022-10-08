@@ -1,13 +1,17 @@
 package com.john.application;
 
+import static com.john.utils.Utils.toUnorderedHtmlList;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import com.john.api.google.CalendarServiceImpl;
 import com.john.api.google.model.Event;
 import com.john.notifications.EmailNotificationService;
+import com.john.notifications.HtmlEmailNotificationService;
 import com.john.notifications.NotificationService;
 import com.john.notifications.TextNotificationService;
 import com.john.notifications.model.Recipient;
@@ -76,25 +80,34 @@ public class StavisQueryOperator implements Runnable {
 	}
 	
 	private void processEvents(List<Event> events) {
-		final String msgSubject = "Stavi's Searcher Alert";
-		String msgBody = "";
+		final String txtMsgSubject = "Alert";
+		final String emailMsgSubject = "Stavi's Searcher Alert";
+		String txtMsgBody = "";
+		String emailMsgBody = "";
+		NotificationService emailService = null;
+		NotificationService textService = new TextNotificationService();
+		
 		if (events.isEmpty()) {
 			log.info("No events found with the specified properties");
-			msgBody = String.format("We're sorry, but Stavi's is not coming in the next %d days", MAX_DAYS);
+			txtMsgBody = emailMsgBody = String.format("We're sorry, but Stavi's is not coming in the next %d days", MAX_DAYS);
+		} else if (events.size() == 1) {
+			log.info(String.valueOf(events.size()).concat(" event found with the specified properties"));
+			txtMsgBody = emailMsgBody = formatEvent(events.get(0));
+			emailService = new EmailNotificationService();
 		} else {
 			log.info(String.valueOf(events.size()).concat(" events found with the specified properties"));
-			msgBody = formatEvent(events.get(0));
+			txtMsgBody = formatEventBrief(events.get(0)) + " with " + (events.size() - 1) + " other date(s) scheduled! Check your email for more details.";
+			emailMsgBody = toUnorderedHtmlList(events.stream().map(this::formatEvent).collect(Collectors.toList()));
+			emailService = new HtmlEmailNotificationService();
 		}
 		
-		NotificationService emailService = new EmailNotificationService();
-		NotificationService textService = new TextNotificationService();
 		Recipient[] recipients = SubscriberProvider.getSubscribers();
 		for (Recipient recipient : recipients) {
 			if (recipient.getEmailEnabled()) {
-				emailService.notify(recipient, msgSubject, msgBody);
+				emailService.notify(recipient, emailMsgSubject, emailMsgBody);
 			}
 			if (recipient.getSmsEnabled()) {
-				textService.notify(recipient, msgSubject, msgBody);
+				textService.notify(recipient, txtMsgSubject, txtMsgBody);
 			}
 		}
 	}
@@ -103,6 +116,12 @@ public class StavisQueryOperator implements Runnable {
 		return String.format("Stavi's will be at %s on %s at %s", event.getLocation(),
 				event.getStart().format(DateTimeFormatter.ISO_LOCAL_DATE),
 				event.getStart().format(DateTimeFormatter.ofPattern("hh:mm a")));
+	}
+	
+	private String formatEventBrief(Event event) {
+		return String.format("%s on %s at %s", event.getLocation(),
+				event.getStart().format(DateTimeFormatter.ISO_LOCAL_DATE),
+				event.getStart().format(DateTimeFormatter.ofPattern("hh:mm")));
 	}
 
 }
