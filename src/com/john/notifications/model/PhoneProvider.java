@@ -1,7 +1,7 @@
 package com.john.notifications.model;
 
 public enum PhoneProvider {
-	VERIZON("Verizon Wireless", "@vtext.com", (short) 160);
+	VERIZON("Verizon Wireless", "@vtext.com", (short) 155);
 	
 	private String name;
 	private String emailExtension;

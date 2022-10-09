@@ -49,6 +49,10 @@ public class EmailProvider {
 		}
 	}
 	
+	public static String getDefaultSender() {
+		return SENDER_EMAIL;
+	}
+	
 	private static Mailer baseMailer() {
 		return MailerBuilder.withSMTPServer(SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD)
 				.withTransportStrategy(TransportStrategy.SMTP_TLS).buildMailer();

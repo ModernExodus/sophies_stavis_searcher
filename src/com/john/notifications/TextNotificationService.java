@@ -18,7 +18,7 @@ public class TextNotificationService implements NotificationService {
 	public void notify(Recipient recipient, String subject, String message) {
 		String toAddress = recipient.getPhoneNumber().concat(recipient.getPhoneProvider().getEmailExtension());
 		Email email = EmailProvider.baseEmailBuilder().to(recipient.getFirstName(), toAddress).withSubject(subject)
-				.withPlainText(limitMessageSize(subject, message, recipient.getPhoneProvider().getMaxLength()))
+				.withPlainText(limitMessageSize(subject, message, EmailProvider.getDefaultSender(), recipient.getPhoneProvider().getMaxLength()))
 				.buildEmail();
 		
 		try {
@@ -37,9 +37,9 @@ public class TextNotificationService implements NotificationService {
 	}
 	
 	// phone carriers limit the length of messages sent
-	private String limitMessageSize(String subject, String message, short maxLength) {
-		if (subject.length() + message.length() > maxLength) {
-			int diff = subject.length() + message.length() - maxLength;
+	private String limitMessageSize(String subject, String message, String sender, short maxLength) {
+		if (subject.length() + message.length() + sender.length() > maxLength) {
+			int diff = subject.length() + message.length() + sender.length() - maxLength;
 			return message.substring(0, message.length() - 3 - diff).concat("...");
 		}
 		return message;

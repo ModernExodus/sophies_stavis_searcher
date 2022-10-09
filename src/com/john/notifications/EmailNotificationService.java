@@ -16,9 +16,16 @@ public class EmailNotificationService implements NotificationService {
 
 	@Override
 	public void notify(Recipient recipient, String subject, String message) {
-		Email email = EmailProvider.baseEmailBuilder().to(recipient.getFirstName(), recipient.getEmail())
+		Email email = composeEmail(recipient, subject, message);
+		sendEmail(email, recipient);
+	}
+	
+	protected Email composeEmail(Recipient recipient, String subject, String message) {
+		return EmailProvider.baseEmailBuilder().to(recipient.getFirstName(), recipient.getEmail())
 				.withSubject(subject).withPlainText(message).buildEmail();
-		
+	}
+	
+	private void sendEmail(Email email, Recipient recipient) {
 		try {
 			if (ApplicationPropertyProvider.getBooleanProperty(Property.EMAIL_ENABLED)) {
 				log.info(String.format("Sending email to %s", maskEmail(recipient.getEmail())));
