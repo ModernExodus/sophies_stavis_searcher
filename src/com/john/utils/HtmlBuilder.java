@@ -7,12 +7,12 @@ import static java.lang.String.format;
  * are performed so it is the caller's responsibility to ensure the HTML
  * they are building is valid.
  */
-public class HtmlBuilder {
+public final class HtmlBuilder {
 	
 	private final StringBuilder html;
 	
 	private HtmlBuilder() {
-		html = new StringBuilder(startTag("html"));
+		html = new StringBuilder(startTag(HtmlTags.HTML));
 	}
 	
 	public HtmlBuilder addElement(String tagName) {
@@ -41,7 +41,7 @@ public class HtmlBuilder {
 	}
 	
 	public String build() {
-		html.append(endTag("html"));
+		html.append(endTag(HtmlTags.HTML));
 		return html.toString();
 	}
 	
@@ -58,6 +58,6 @@ public class HtmlBuilder {
 	}
 	
 	private static String emptyTag(String tagName) {
-		return format("<%s />");
+		return format("<%s />", tagName);
 	}
 }

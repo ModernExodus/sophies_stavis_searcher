@@ -1,7 +1,5 @@
 package com.john.application;
 
-import static com.john.utils.Utils.toUnorderedHtmlList;
-
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +17,8 @@ import com.john.security.oauth.AccessToken;
 import com.john.security.oauth.AccessTokenService;
 import com.john.security.oauth.AccessTokenServiceProvider;
 import com.john.security.oauth.google.GoogleAccessToken;
+import com.john.utils.HtmlBuilder;
+import com.john.utils.HtmlTags;
 import com.john.utils.providers.ApplicationPropertyProvider;
 import com.john.utils.providers.SubscriberProvider;
 import com.john.utils.providers.ApplicationPropertyProvider.Property;
@@ -80,8 +80,8 @@ public class StavisQueryOperator implements Runnable {
 	}
 	
 	private void processEvents(List<Event> events) {
-		final String txtMsgSubject = "Alert";
-		final String emailMsgSubject = "Stavi's Searcher Alert";
+		final String txtMsgSubject = ApplicationPropertyProvider.getProperty(Property.SMS_SUBJECT, "Alert");
+		final String emailMsgSubject = ApplicationPropertyProvider.getProperty(Property.EMAIL_SUBJECT, "Stavi's Searcher Alert");
 		String txtMsgBody = "";
 		String emailMsgBody = "";
 		NotificationService emailService = null;
@@ -96,8 +96,8 @@ public class StavisQueryOperator implements Runnable {
 			emailService = new EmailNotificationService();
 		} else {
 			log.info(String.valueOf(events.size()).concat(" events found with the specified properties"));
-			txtMsgBody = formatEventBrief(events.get(0)) + " with " + (events.size() - 1) + " other date(s) scheduled! Check your email for more details.";
-			emailMsgBody = toUnorderedHtmlList(events.stream().map(this::formatEvent).collect(Collectors.toList()));
+			txtMsgBody = formatEventBrief(events.get(0), "hh:mm") + " with " + (events.size() - 1) + " other date(s) scheduled! Check your email for more details.";
+			emailMsgBody = composeEmailHTMLBody(events);
 			emailService = new HtmlEmailNotificationService();
 		}
 		
@@ -119,9 +119,25 @@ public class StavisQueryOperator implements Runnable {
 	}
 	
 	private String formatEventBrief(Event event) {
+		return formatEventBrief(event, "hh:mm a");
+	}
+	
+	private String formatEventBrief(Event event, String timePattern) {
 		return String.format("%s on %s at %s", event.getLocation(),
 				event.getStart().format(DateTimeFormatter.ISO_LOCAL_DATE),
-				event.getStart().format(DateTimeFormatter.ofPattern("hh:mm")));
+				event.getStart().format(DateTimeFormatter.ofPattern(timePattern)));
+	}
+	
+	private String composeEmailHTMLBody(List<Event> events) {
+		final String intro = String.format("Great news! Stavi's has %d events scheduled in the next %d days!",
+				events.size(), MAX_DAYS);
+		HtmlBuilder html = HtmlBuilder.newBuilder().addElement(HtmlTags.SPAN, intro).addEmptyElement(HtmlTags.BREAK)
+				.addEmptyElement(HtmlTags.BREAK).openTag(HtmlTags.UNORDERED_LIST);
+		for (String event : events.stream().map(this::formatEventBrief).collect(Collectors.toList())) {
+			html.addElement(HtmlTags.LINE_ITEM, event);
+		}
+		html.closeTag(HtmlTags.UNORDERED_LIST);
+		return html.build();
 	}
 
 }
