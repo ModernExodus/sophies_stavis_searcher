@@ -27,7 +27,7 @@ __Backlog__
 3. Notifications that better inform my wife of the food truck's schedule outside our neighborhood
 4. Logs that rotate based on date
 5. Query the Google Calendar API with more than one keyword
-6. Notify my wife of other events in which she may be interested
+6. ~~Notify my wife of other events in which she may be interested~~
 7. ~~Implement the `EncryptedFileReader` to read encrypted data instead of storing in plaintext files~~
 8. Implement a way to check the health status of the application without waiting for the scheduled health check notification
 9. ~~Implement a way to begin queries after a delay specified in application properties rather than immediately kicking them off upon application start~~
