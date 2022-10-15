@@ -1,6 +1,7 @@
 package com.john.utils.providers.secrets;
 
 import static com.john.utils.providers.RuntimeArgumentProvider.RuntimeArgument.SECRETS_LOCATION;
+import static com.john.utils.providers.RuntimeArgumentProvider.RuntimeArgument.CACHE_SECRETS;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,13 +12,17 @@ import com.john.utils.providers.RuntimeArgumentProvider;
 
 /**
  * Responsible for knowing how to find secrets that may be needed in other parts of the 
- * application. Unlike other providers, <code>SecretProvider</code> will attempt to retrieve
- * the requested secret each time and will not cache secrets. This is to prevent secrets from
- * living indefinitely in the heap which can introduce vulnerabilities during heap dumps.
+ * application. If the runtime argument "cache-secrets" is <code>false</code> or not provided, <code>SecretProvider</code> 
+ * will attempt to retrieve the requested secret each time and will not cache secrets. This prevents secrets from
+ * living indefinitely in the heap which can introduce vulnerabilities during heap dumps. If "cache-secrets" is
+ * <code>true</code>, this provider will only retrieve secrets once, and all future attempts to retrieve secrets
+ * will return the original secrets.
  */
 public final class SecretProvider {
 	private static final Logger log = Logger.getLogger(SecretProvider.class.getCanonicalName());
 	private static final String SECRETS_FILE_LOCATION;
+	
+	private static Properties SECRETS;
 	
 	static {
 		if (RuntimeArgumentProvider.hasArgumentValue(SECRETS_LOCATION)) {
@@ -40,12 +45,20 @@ public final class SecretProvider {
 	}
 	
 	private static Properties loadSecrets() throws MissingSecretException {
+		if (SECRETS != null) {
+			log.info("Secrets are cached --> returning cached secrets");
+			return SECRETS;
+		}
 		Properties secrets = new Properties();
-		try {
-			secrets.load(new FileInputStream(SECRETS_FILE_LOCATION));
+		try (FileInputStream fis = new FileInputStream(SECRETS_FILE_LOCATION)) {
+			secrets.load(fis);
 		} catch (IOException e) {
 			log.severe(e.getMessage());
 			throw new MissingSecretException(e);
+		}
+		if (RuntimeArgumentProvider.getBooleanArgumentValue(CACHE_SECRETS)) {
+			SECRETS = secrets;
+			log.info("Secret caching is enabled --> secrets cached successfully");
 		}
 		return secrets;
 	}
