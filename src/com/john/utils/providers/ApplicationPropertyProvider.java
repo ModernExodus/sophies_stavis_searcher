@@ -15,8 +15,8 @@ public final class ApplicationPropertyProvider {
 	
 	static {
 		APP_PROPERTIES = new Properties();
-		try {			
-			APP_PROPERTIES.load(new FileInputStream("./resources/application.properties"));
+		try (FileInputStream fis = new FileInputStream("./resources/application.properties")) {			
+			APP_PROPERTIES.load(fis);
 		} catch (IOException e) {
 			log.severe("Failed to load application properties");
 			throw new RuntimeException(e.getMessage());
