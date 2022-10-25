@@ -76,7 +76,9 @@ public final class RuntimeArgumentProvider {
 	
 	public static enum RuntimeArgument {
 		SECRETS_LOCATION("secrets-location"),
-		CACHE_SECRETS("cache-secrets");
+		CACHE_SECRETS("cache-secrets"),
+		EAGER_LOAD_SECRETS("eager-load-secrets"),
+		DELETE_SECRETS_ON_LOAD("delete-secrets-on-load");
 		
 		private final String value;
 		private RuntimeArgument(String value) {
