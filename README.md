@@ -31,3 +31,4 @@ __Backlog__
 7. ~~Implement the `EncryptedFileReader` to read encrypted data instead of storing in plaintext files~~
 8. Implement a way to check the health status of the application without waiting for the scheduled health check notification
 9. ~~Implement a way to begin queries after a delay specified in application properties rather than immediately kicking them off upon application start~~
+10. Create a single store for all properties instead of relying on different providers depending on how the property was provided to the application
