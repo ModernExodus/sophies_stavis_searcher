@@ -1,5 +1,6 @@
 package com.john.utils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -31,5 +32,13 @@ public class Utils {
 		int saltLength = SecretProvider.getIntSecret(Secret.SALTING_STRATEGY_LENGTH);
 		String saltingComposition = SecretProvider.getSecret(Secret.SALTING_STRATEGY_COMPOSITION);
 		return SaltingStrategy.getStrategy(Arrays.asList(saltingComposition.split(",")), saltLength);
+	}
+	
+	public static boolean deleteFile(String filePath) {
+		File file = new File(filePath);
+		if (file.exists()) {
+			return file.delete();
+		}
+		return false;
 	}
 }

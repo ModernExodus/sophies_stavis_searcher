@@ -1,7 +1,10 @@
 package com.john.utils.providers.secrets;
 
+import static com.john.utils.Utils.deleteFile;
 import static com.john.utils.providers.RuntimeArgumentProvider.RuntimeArgument.SECRETS_LOCATION;
 import static com.john.utils.providers.RuntimeArgumentProvider.RuntimeArgument.CACHE_SECRETS;
+import static com.john.utils.providers.RuntimeArgumentProvider.RuntimeArgument.EAGER_LOAD_SECRETS;
+import static com.john.utils.providers.RuntimeArgumentProvider.RuntimeArgument.DELETE_SECRETS_ON_LOAD;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,6 +30,18 @@ public final class SecretProvider {
 	static {
 		if (RuntimeArgumentProvider.hasArgumentValue(SECRETS_LOCATION)) {
 			SECRETS_FILE_LOCATION = RuntimeArgumentProvider.getArgumentValue(SECRETS_LOCATION);
+			if (RuntimeArgumentProvider.getBooleanArgumentValue(EAGER_LOAD_SECRETS)) {
+				try {
+					log.info("Eager loading of secrets enabled --> Loading secrets now");
+					if (!RuntimeArgumentProvider.getBooleanArgumentValue(CACHE_SECRETS)) {
+						log.warning("Secrets are being eagerly loaded, yet secrets caching is disabled. The eager loading has no effect.");
+					}
+					loadSecrets();
+				} catch (MissingSecretException e) {
+					log.severe("Failed to eagerly load secrets");
+					throw new RuntimeException(e);
+				}
+			}
 		} else {
 			throw new RuntimeException("No secret location was provided!");
 		}
@@ -46,7 +61,7 @@ public final class SecretProvider {
 	
 	private static Properties loadSecrets() throws MissingSecretException {
 		if (SECRETS != null) {
-			log.info("Secrets are cached --> returning cached secrets");
+			log.fine("Secrets are cached --> returning cached secrets");
 			return SECRETS;
 		}
 		Properties secrets = new Properties();
@@ -55,10 +70,19 @@ public final class SecretProvider {
 		} catch (IOException e) {
 			log.severe(e.getMessage());
 			throw new MissingSecretException(e);
+		} finally {
+			if (RuntimeArgumentProvider.getBooleanArgumentValue(DELETE_SECRETS_ON_LOAD)) {
+				log.info("Attempting to delete secrets file");
+				if (deleteFile(SECRETS_FILE_LOCATION)) {
+					log.info("Successfully deleted secrets file");
+				} else {
+					log.warning("Failed to delete secrets file");
+				}
+			}
 		}
 		if (RuntimeArgumentProvider.getBooleanArgumentValue(CACHE_SECRETS)) {
 			SECRETS = secrets;
-			log.info("Secret caching is enabled --> secrets cached successfully");
+			log.fine("Secret caching is enabled --> secrets cached successfully");
 		}
 		return secrets;
 	}
