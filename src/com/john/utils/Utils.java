@@ -36,9 +36,6 @@ public class Utils {
 	
 	public static boolean deleteFile(String filePath) {
 		File file = new File(filePath);
-		if (file.exists()) {
-			return file.delete();
-		}
-		return false;
+		return file.exists() && file.delete();
 	}
 }
