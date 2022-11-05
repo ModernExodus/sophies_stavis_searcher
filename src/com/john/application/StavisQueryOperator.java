@@ -84,7 +84,7 @@ public class StavisQueryOperator implements Runnable {
 		final String emailMsgSubject = ApplicationPropertyProvider.getProperty(Property.EMAIL_SUBJECT, "Stavi's Searcher Alert");
 		String txtMsgBody = "";
 		String emailMsgBody = "";
-		NotificationService emailService = null;
+		NotificationService emailService = new EmailNotificationService();
 		NotificationService textService = new TextNotificationService();
 		
 		if (events.isEmpty()) {
@@ -93,7 +93,6 @@ public class StavisQueryOperator implements Runnable {
 		} else if (events.size() == 1) {
 			log.info(String.valueOf(events.size()).concat(" event found with the specified properties"));
 			txtMsgBody = emailMsgBody = formatEvent(events.get(0));
-			emailService = new EmailNotificationService();
 		} else {
 			log.info(String.valueOf(events.size()).concat(" events found with the specified properties"));
 			txtMsgBody = formatEventBrief(events.get(0), "hh:mm") + " with " + (events.size() - 1) + " other date(s) scheduled! Check your email for more details.";
